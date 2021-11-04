@@ -7,14 +7,16 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.mirkopruiti.android_team_test.data.model.FavoritePokemon
 import com.mirkopruiti.android_team_test.data.model.Pokemon
 import com.mirkopruiti.android_team_test.data.model.PokemonInfo
 
-@Database(entities = [Pokemon::class, PokemonInfo::class], version = 1, exportSchema = false)
-@TypeConverters(value = [TypeResponseConverter::class, StatResponseConverter::class])
+@Database(entities = [Pokemon::class, PokemonInfo::class, FavoritePokemon::class], version = 1, exportSchema = false)
+@TypeConverters(value = [TypeResponseConverter::class, StatResponseConverter::class, FavoritePokemonConverter::class])
 abstract class PokemonDatabase : RoomDatabase() {
 
     abstract fun pokemonDao(): PokemonDao
+    abstract fun favoriteDao(): FavoriteDao
 
     companion object {
         private const val DB_NAME = "pokemon.db"

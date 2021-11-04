@@ -22,6 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.details.DetailActivity" />
+        <activity
+            android:name=".ui.details.DetailActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.favorites.FavoritesActivity"
+            android:exported="true" />
     </application>
+
 </manifest>

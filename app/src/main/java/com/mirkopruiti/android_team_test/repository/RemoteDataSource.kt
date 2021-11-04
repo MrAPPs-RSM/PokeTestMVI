@@ -4,13 +4,14 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.bumptech.glide.load.HttpException
 import com.mirkopruiti.android_team_test.data.api.ApiCall
+import com.mirkopruiti.android_team_test.data.db.FavoriteDao
 import com.mirkopruiti.android_team_test.data.db.PokemonDao
 import com.mirkopruiti.android_team_test.data.model.Pokemon
 import java.io.IOException
 
 const val STARTING_PAGE_INDEX = 0
 
-class HomeDataSource(private val apiCall: ApiCall, private val pokemonDao: PokemonDao) : PagingSource<Int, Pokemon>() {
+class HomeDataSource(private val apiCall: ApiCall, private val pokemonDao: PokemonDao, private val favoriteDao: FavoriteDao) : PagingSource<Int, Pokemon>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Pokemon> {
         val page = params.key ?: STARTING_PAGE_INDEX
@@ -20,6 +21,8 @@ class HomeDataSource(private val apiCall: ApiCall, private val pokemonDao: Pokem
             for (poke in pokemons) {
                 poke.setPokemonId()
                 poke.setPokemonPage(page)
+                var favorite = favoriteDao.isFavorite(poke.id)
+                poke.isFavorite = favorite == 1
             }
             pokemonDao.insertPokemonList(pokemons)
             LoadResult.Page(
@@ -37,11 +40,4 @@ class HomeDataSource(private val apiCall: ApiCall, private val pokemonDao: Pokem
     }
 
     override fun getRefreshKey(state: PagingState<Int, Pokemon>): Int? = null
-
-//    override fun getRefreshKey(state: PagingState<Int, Pokemon>): Int? {
-//        return state.anchorPosition?.let { anchorPosition ->
-//            val anchorPage = state.closestPageToPosition(anchorPosition)
-//            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
-//        }
-//    }
 }

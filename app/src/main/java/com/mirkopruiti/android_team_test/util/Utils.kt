@@ -11,6 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.mirkopruiti.android_team_test.R
 
 /**
  * Created by Mirko Pruiti on 03/11/21.
@@ -61,4 +62,5 @@ fun ImageView.setUrlImage(url:String?){
         .load(url)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(this)
+
 }

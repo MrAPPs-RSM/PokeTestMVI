@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PokeTest MVI</string>
+    <string name="action_favorite">favourite</string>
 </resources>

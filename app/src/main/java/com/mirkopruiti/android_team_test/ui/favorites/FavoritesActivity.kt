@@ -1,13 +1,10 @@
-package com.mirkopruiti.android_team_test.ui.home
+package com.mirkopruiti.android_team_test.ui.favorites
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,50 +12,39 @@ import com.mirkopruiti.android_team_test.R
 import com.mirkopruiti.android_team_test.data.model.FavoritePokemon
 import com.mirkopruiti.android_team_test.data.model.Pokemon
 import com.mirkopruiti.android_team_test.ui.details.DetailActivity
-import com.mirkopruiti.android_team_test.ui.favorites.FavoritesActivity
-import com.mirkopruiti.android_team_test.ui.home.adapter.HomeAdapter
+import com.mirkopruiti.android_team_test.ui.favorites.adapter.FavoriteAdapter
 import com.mirkopruiti.android_team_test.ui.home.adapter.PokemonClickListener
 import com.mirkopruiti.android_team_test.ui.home.state.HomeState
-import com.mirkopruiti.android_team_test.util.NetworkUtil
 import io.uniflow.androidx.flow.onStates
 import io.uniflow.core.flow.data.UIState
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
-@ExperimentalCoroutinesApi
-class HomeActivity : AppCompatActivity(), PokemonClickListener {
+class FavoritesActivity : AppCompatActivity(), PokemonClickListener {
 
-    private val homeViewModel by viewModel<HomeViewModel>()
-    private lateinit var adapter: HomeAdapter
+    private val favoriteViewModel by viewModel<FavoriteViewModel>()
+    private lateinit var adapter: FavoriteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_favourites)
 
         setupUI()
         setupSTATE()
 
-    }
-
-    override fun onResume() {
         fetchData()
-        super.onResume()
+
     }
 
     private fun fetchData() {
-        if (NetworkUtil.isConnectedToNetwork(this)) {
-            homeViewModel.getRemotePokemons()
-        } else {
-            homeViewModel.getLocalPokemons()
-            Toast.makeText(this@HomeActivity, "No Connection - Results from Local DB", Toast.LENGTH_LONG).show()
-        }
+        favoriteViewModel.getFavoritePokemons()
     }
 
     private fun setupSTATE() {
-        onStates(homeViewModel) { state ->
+        onStates(favoriteViewModel) { state ->
             when (state) {
                 is UIState.Loading -> onLoading()
                 is HomeState.Pokemons -> onSuccess(state.pokemon)
@@ -85,16 +71,16 @@ class HomeActivity : AppCompatActivity(), PokemonClickListener {
 
     override fun onFavoriteClickListener(poke: Pokemon) {
         var favoritePokemon = FavoritePokemon(poke.id, poke)
-        homeViewModel.setFavorites(poke.isFavorite, favoritePokemon, ::onComplete)
+        favoriteViewModel.setFavorites(true, favoritePokemon, ::onComplete)
     }
 
     private fun onComplete() {
-        homeViewModel.getLocalPokemons()
+        fetchData()
     }
 
     private fun onError(error: String?) {
         progressBar.visibility = View.GONE
-        Toast.makeText(this@HomeActivity, error, Toast.LENGTH_LONG).show()
+        Toast.makeText(this@FavoritesActivity, error, Toast.LENGTH_LONG).show()
     }
 
     private fun onLoading() {
@@ -102,54 +88,17 @@ class HomeActivity : AppCompatActivity(), PokemonClickListener {
     }
 
     private fun setupUI() {
-        supportActionBar?.elevation = 0F
-        adapter = HomeAdapter(this)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Favorites"
+        adapter = FavoriteAdapter(this)
         pokemonRecyclerview.layoutManager = GridLayoutManager(this, 2);
         pokemonRecyclerview.adapter = adapter
-        performSearch()
     }
 
-    private fun performSearch() {
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                search(query)
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                search(newText)
-                return true
-            }
-        })
-    }
-
-    private fun search(text: String?) {
-        if (text?.length!! > 0)
-            homeViewModel.getSearchPokemons(text!!)
-        else
-            fetchData()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
         return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) : Boolean {
-
-        val id = item.itemId
-
-        if (id == R.id.action_favorite) {
-            var intent = Intent(this, FavoritesActivity::class.java)
-            startActivity(intent)
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
 
 }
-
-
-

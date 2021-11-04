@@ -7,5 +7,6 @@ val databaseModule = module {
 
     single { PokemonDatabase.getInstance(get()) }
     single { get<PokemonDatabase>().pokemonDao() }
+    single { get<PokemonDatabase>().favoriteDao() }
 
 }

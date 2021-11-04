@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.mirkopruiti.android_team_test.R
 import com.mirkopruiti.android_team_test.data.model.Pokemon
@@ -30,7 +31,7 @@ class DetailActivity : AppCompatActivity() {
 
     private val detailsViewModel by viewModel<DetailsViewModel>()
     private var pokemon: Pokemon? = null
-    private var adapter = StatsAdapter()
+    private lateinit var adapter : StatsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +68,7 @@ class DetailActivity : AppCompatActivity() {
             pokemonImage.setImageWithColorBackground(pokemon?.getImageUrl(), header)
 
             pokeInfo.observe(this, Observer {
-                pokemonName.text = it.name
+                pokemonName.text = it.name.replaceFirstChar { it -> it.uppercaseChar() }
                 setTypes(it.types)
                 adapter.setData(it.stats)
                 adapter.notifyDataSetChanged()
@@ -97,7 +98,8 @@ class DetailActivity : AppCompatActivity() {
     private fun setupUI() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         error.tryButton.setOnClickListener { getPokemonDetails() }
-        listStats.layoutManager = GridLayoutManager(this, 2);
+        adapter = StatsAdapter(this)
+        listStats.layoutManager = LinearLayoutManager(this);
         listStats.adapter = adapter
     }
 

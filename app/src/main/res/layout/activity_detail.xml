@@ -90,12 +90,26 @@
 
         </com.google.android.material.chip.ChipGroup>
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/statistics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16sp"
+            android:layout_marginLeft="16dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textColor="@color/gray_light2"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/listStats"
+            app:layout_constraintTop_toBottomOf="@id/typeGroup"
+            android:text="Statistics" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_margin="8sp"
             android:nestedScrollingEnabled="false"
             android:id="@+id/listStats"
-            app:layout_constraintTop_toBottomOf="@id/typeGroup"
+            app:layout_constraintTop_toBottomOf="@id/statistics"
             android:layout_height="wrap_content" />
 
         <include layout="@layout/error_view"

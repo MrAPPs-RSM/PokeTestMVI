@@ -1,4 +1,4 @@
-package com.mirkopruiti.android_team_test.ui.home.adapter
+package com.mirkopruiti.android_team_test.ui.favorites.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,11 +10,18 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mirkopruiti.android_team_test.R
+import com.mirkopruiti.android_team_test.data.model.FavoritePokemon
 import com.mirkopruiti.android_team_test.data.model.Pokemon
+import com.mirkopruiti.android_team_test.ui.home.adapter.PokemonClickListener
 import com.mirkopruiti.android_team_test.util.setImageWithColorBackground
 import kotlinx.android.synthetic.main.home_item.view.*
 
-class HomeAdapter(private val pokemonClickListener: PokemonClickListener) : PagingDataAdapter<Pokemon, PokemonViewHolder>(diffCallback) {
+/**
+ * Created by Mirko Pruiti on 04/11/21.
+ *
+ * @author Mirko Pruiti
+ */
+class FavoriteAdapter (private val pokemonClickListener: PokemonClickListener) : PagingDataAdapter<Pokemon, PokemonViewHolder>(diffCallback) {
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<Pokemon>() {
@@ -41,7 +48,9 @@ class HomeAdapter(private val pokemonClickListener: PokemonClickListener) : Pagi
 }
 
 
-class PokemonViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.home_item, parent, false)) {
+class PokemonViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+    LayoutInflater.from(parent.context).inflate(
+        R.layout.home_item, parent, false)) {
 
     private val pokemonCard = itemView.findViewById<CardView>(R.id.pokemonCard)
     private val pokemonImage = itemView.findViewById<ImageView>(R.id.pokemonImage)
@@ -61,10 +70,7 @@ class PokemonViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(LayoutInfla
 
         pokemonName.text = poke?.name!!.replaceFirstChar { it.uppercaseChar() }
 
-        if (poke.isFavorite)
-            favouriteIcon.setImageResource(R.drawable.ic_favorite)
-        else
-            favouriteIcon.setImageResource(R.drawable.ic_favorite_border)
+        favouriteIcon.setImageResource(R.drawable.ic_favorite)
 
     }
 }
