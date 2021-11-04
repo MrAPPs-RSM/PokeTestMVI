@@ -12,6 +12,6 @@ class ApiCall constructor(private val apiService: ApiService) {
     )
 
     companion object {
-        private const val PAGING_SIZE = 20
+        private const val PAGING_SIZE = 100
     }
 }
