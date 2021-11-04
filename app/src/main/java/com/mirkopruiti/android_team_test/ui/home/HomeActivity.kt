@@ -83,13 +83,9 @@ class HomeActivity : AppCompatActivity(), PokemonClickListener {
         startActivity(intent)
     }
 
-    override fun onFavoriteClickListener(poke: Pokemon) {
+    override fun onFavoriteClickListener(pos: Int, poke: Pokemon) {
         var favoritePokemon = FavoritePokemon(poke.id, poke)
-        homeViewModel.setFavorites(poke.isFavorite, favoritePokemon, ::onComplete)
-    }
-
-    private fun onComplete() {
-        homeViewModel.getLocalPokemons()
+        homeViewModel.setFavorites(poke.isFavorite, favoritePokemon)
     }
 
     private fun onError(error: String?) {

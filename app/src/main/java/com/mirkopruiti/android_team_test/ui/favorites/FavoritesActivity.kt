@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingData
+import androidx.paging.filter
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mirkopruiti.android_team_test.R
 import com.mirkopruiti.android_team_test.data.model.FavoritePokemon
@@ -15,6 +16,7 @@ import com.mirkopruiti.android_team_test.ui.details.DetailActivity
 import com.mirkopruiti.android_team_test.ui.favorites.adapter.FavoriteAdapter
 import com.mirkopruiti.android_team_test.ui.home.adapter.PokemonClickListener
 import com.mirkopruiti.android_team_test.ui.home.state.HomeState
+import com.mirkopruiti.android_team_test.util.NetworkUtil
 import io.uniflow.androidx.flow.onStates
 import io.uniflow.core.flow.data.UIState
 import kotlinx.android.synthetic.main.activity_main.*
@@ -35,8 +37,11 @@ class FavoritesActivity : AppCompatActivity(), PokemonClickListener {
         setupUI()
         setupSTATE()
 
-        fetchData()
+    }
 
+    override fun onResume() {
+        fetchData()
+        super.onResume()
     }
 
     private fun fetchData() {
@@ -56,7 +61,7 @@ class FavoritesActivity : AppCompatActivity(), PokemonClickListener {
     private fun onSuccess(pokes: Flow<PagingData<Pokemon>>) {
         lifecycleScope.launch {
             pokes.collect { pagingData ->
-                adapter.submitData(pagingData)
+                adapter.submitData(pagingData.filter { it.isFavorite })
             }
         }
         adapter.notifyDataSetChanged()
@@ -69,9 +74,9 @@ class FavoritesActivity : AppCompatActivity(), PokemonClickListener {
         startActivity(intent)
     }
 
-    override fun onFavoriteClickListener(poke: Pokemon) {
+    override fun onFavoriteClickListener(pos: Int, poke: Pokemon) {
         var favoritePokemon = FavoritePokemon(poke.id, poke)
-        favoriteViewModel.setFavorites(true, favoritePokemon, ::onComplete)
+        favoriteViewModel.setFavorites(favoritePokemon, ::onComplete)
     }
 
     private fun onComplete() {

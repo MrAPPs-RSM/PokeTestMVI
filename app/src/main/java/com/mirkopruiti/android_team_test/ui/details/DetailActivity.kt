@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.mirkopruiti.android_team_test.R
+import com.mirkopruiti.android_team_test.data.model.FavoritePokemon
 import com.mirkopruiti.android_team_test.data.model.Pokemon
 import com.mirkopruiti.android_team_test.data.model.PokemonInfo
 import com.mirkopruiti.android_team_test.ui.details.adapter.StatsAdapter
@@ -22,6 +23,7 @@ import io.uniflow.androidx.flow.onStates
 import io.uniflow.core.flow.data.UIState
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.error_view.view.*
+import kotlinx.android.synthetic.main.home_item.view.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -74,6 +76,8 @@ class DetailActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
                 onSuccesData()
             })
+
+            refreshFavoriteIcon()
         }
     }
 
@@ -101,6 +105,21 @@ class DetailActivity : AppCompatActivity() {
         adapter = StatsAdapter(this)
         listStats.layoutManager = LinearLayoutManager(this);
         listStats.adapter = adapter
+
+        favouriteIcon.setOnClickListener {
+            if (pokemon != null){
+                var favoritePokemon = FavoritePokemon(pokemon!!.id, pokemon!!)
+                detailsViewModel.setFavorites(pokemon!!.isFavorite, favoritePokemon, ::refreshFavoriteIcon)
+                pokemon!!.isFavorite = !pokemon!!.isFavorite
+            }
+        }
+    }
+
+    private fun refreshFavoriteIcon(){
+        if (pokemon?.isFavorite == true)
+            favouriteIcon.setImageResource(R.drawable.ic_favorite)
+        else
+            favouriteIcon.setImageResource(R.drawable.ic_favorite_border)
     }
 
     private fun setTypes(types: List<PokemonInfo.TypeResponse>) {

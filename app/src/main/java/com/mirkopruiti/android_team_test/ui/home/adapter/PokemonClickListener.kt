@@ -4,5 +4,5 @@ import com.mirkopruiti.android_team_test.data.model.Pokemon
 
 interface PokemonClickListener {
     fun onPokemonClickListener(poke: Pokemon)
-    fun onFavoriteClickListener(poke: Pokemon)
+    fun onFavoriteClickListener(position: Int, poke: Pokemon)
 }

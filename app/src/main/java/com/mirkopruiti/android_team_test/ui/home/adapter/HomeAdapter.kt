@@ -32,14 +32,20 @@ class HomeAdapter(private val pokemonClickListener: PokemonClickListener) : Pagi
             getItem(position)?.let { it -> pokemonClickListener.onPokemonClickListener(it) }
         }
         holder.itemView.favouriteIcon.setOnClickListener {
-            getItem(position)?.let { it -> pokemonClickListener.onFavoriteClickListener(it) }
+            getItem(position)?.let { it -> pokemonClickListener.onFavoriteClickListener(position, it) }
+            updateFavorite(position)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder { return PokemonViewHolder(parent) }
 
-}
+    private fun updateFavorite(position: Int){
+        var poke = getItem(position)
+        getItem(position)?.isFavorite = poke?.isFavorite != true
+        notifyItemChanged(position)
+    }
 
+}
 
 class PokemonViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.home_item, parent, false)) {
 

@@ -21,15 +21,10 @@ class FavoriteViewModel (private val favoriteRepository: FavoriteRepository, pri
         } }
     )
 
-    fun setFavorites(isFavorite:Boolean, favoritePokemon: FavoritePokemon, completeCallback: () -> Any) {
+    fun setFavorites(favoritePokemon: FavoritePokemon, completeCallback: () -> Any) {
         viewModelScope.launch() {
-            if (isFavorite){
-                favoriteDao.delete(favoritePokemon)
-                completeCallback()
-            } else {
-                favoriteDao.insertPokemon(favoritePokemon)
-                completeCallback()
-            }
+            favoriteDao.delete(favoritePokemon)
+            completeCallback()
         }
     }
 

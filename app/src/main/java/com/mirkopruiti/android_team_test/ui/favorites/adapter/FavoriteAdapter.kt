@@ -34,12 +34,9 @@ class FavoriteAdapter (private val pokemonClickListener: PokemonClickListener) :
     }
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
-        holder.bindTo(getItem(position), holder)
+        holder.bindTo(getItem(position), holder, pokemonClickListener)
         holder.itemView.setOnClickListener {
             getItem(position)?.let { it -> pokemonClickListener.onPokemonClickListener(it) }
-        }
-        holder.itemView.favouriteIcon.setOnClickListener {
-            getItem(position)?.let { it -> pokemonClickListener.onFavoriteClickListener(it) }
         }
     }
 
@@ -48,9 +45,7 @@ class FavoriteAdapter (private val pokemonClickListener: PokemonClickListener) :
 }
 
 
-class PokemonViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(
-        R.layout.home_item, parent, false)) {
+class PokemonViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.home_item, parent, false)) {
 
     private val pokemonCard = itemView.findViewById<CardView>(R.id.pokemonCard)
     private val pokemonImage = itemView.findViewById<ImageView>(R.id.pokemonImage)
@@ -58,7 +53,7 @@ class PokemonViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
     private val favouriteIcon = itemView.findViewById<ImageView>(R.id.favouriteIcon)
 
-    fun bindTo(poke: Pokemon?, holder: PokemonViewHolder) {
+    fun bindTo(poke: Pokemon?, holder: PokemonViewHolder, pokemonClickListener: PokemonClickListener) {
 
         pokemonCard.setCardBackgroundColor(
             ContextCompat.getColor(holder.itemView?.context,
@@ -72,5 +67,8 @@ class PokemonViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
         favouriteIcon.setImageResource(R.drawable.ic_favorite)
 
+        favouriteIcon.setOnClickListener {
+            pokemonClickListener.onFavoriteClickListener(position, poke)
+        }
     }
 }

@@ -36,6 +36,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/pokeball" />
 
+            <ImageView
+                android:id="@+id/favouriteIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:srcCompat="@drawable/ic_favorite_border"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/pokemonId"
                 android:layout_width="0dp"

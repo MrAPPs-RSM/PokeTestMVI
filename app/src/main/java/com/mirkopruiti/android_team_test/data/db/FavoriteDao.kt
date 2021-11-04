@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.room.*
 import androidx.room.Delete
 import com.mirkopruiti.android_team_test.data.model.FavoritePokemon
+import com.mirkopruiti.android_team_test.data.model.Pokemon
 
 
 @Dao

@@ -17,16 +17,13 @@ class FavoriteDataSource(private val pokemonDao: PokemonDao, private val favorit
 
         return try {
             val pokemons = pokemonDao.getPokemonList(page)
-            var favoritePokemons: MutableList<Pokemon> =  mutableListOf()
             for (poke in pokemons) {
                 var favorite = favoriteDao.isFavorite(poke.id)
                 poke.isFavorite = favorite == 1
-                if (favorite == 1)
-                    favoritePokemons.add(poke)
             }
             pokemonDao.insertPokemonList(pokemons)
             LoadResult.Page(
-                data = favoritePokemons,
+                data = pokemons,
                 prevKey = if (page == F_STARTING_PAGE_INDEX) null else page - 1,
                 nextKey = if (pokemons.isEmpty()) null else page + 1
             )

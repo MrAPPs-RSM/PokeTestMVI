@@ -53,8 +53,7 @@ fun ImageView.setImageWithColorBackground(url:String?,viewBackground:View){
                 return false
             }
 
-        })
-        .into(this)
+        }).into(this)
 }
 
 fun ImageView.setUrlImage(url:String?){

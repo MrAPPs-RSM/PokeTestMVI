@@ -42,14 +42,12 @@ class HomeViewModel (private val homeRepository: HomeRepository, private val fav
         } }
     )
 
-    fun setFavorites(isFavorite:Boolean, favoritePokemon:FavoritePokemon, completeCallback: () -> Any) {
+    fun setFavorites(isFavorite:Boolean, favoritePokemon:FavoritePokemon) {
         viewModelScope.launch() {
             if (isFavorite){
                 favoriteDao.delete(favoritePokemon)
-                completeCallback()
             } else {
                 favoriteDao.insertPokemon(favoritePokemon)
-                completeCallback()
             }
         }
     }
