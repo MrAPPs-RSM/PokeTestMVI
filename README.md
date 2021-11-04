@@ -14,4 +14,5 @@ You will be able to see a list of Pokémon with its image and name. If you tap a
 5. [Retrofit2 & OkHttp3](https://github.com/square/retrofit) for the REST APIs and paging network data.
 6. [Glide](https://github.com/bumptech/glide), [GlidePalette](https://github.com/florent37/GlidePalette) for loading images.
 7. [Paging 3](https://developer.android.com/topic/libraries/architecture/paging/v3-overview) for display pages of data from a larger dataset from local storage or over network.
-8. [Room](https://developer.android.com/jetpack/androidx/releases/room) persistence librar
+8. [Room](https://developer.android.com/jetpack/androidx/releases/room) persistence library
+9. [ProgressView](https://github.com/skydoves/ProgressView) external library for animated progressview
